@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Zach AI</title>
+</head>
+<body>
+  <h2>Zach's Coding AI</h2>
+  <textarea id="prompt" rows="10" cols="60"></textarea><br>
+  <button onclick="send()">Run</button>
+  <pre id="out"></pre>
+
+  <script>
+    async function send() {
+      const res = await fetch("/task", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          owner: "YOUR_GITHUB_NAME",
+          repo: "YOUR_REPO",
+          prompt: document.getElementById("prompt").value
+        })
+      });
+      const data = await res.json();
+      document.getElementById("out").textContent = data.result;
+    }
+  </script>
+</body>
+</html>

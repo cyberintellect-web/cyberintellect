@@ -82,26 +82,4 @@ async function openaiChat(messages) {
     sha
   });
 }
-
-  app.post("/task", async (req, res) => {
-  const { prompt, owner, repo } = req.body;
-
-  const files = await readRepo(owner, repo);
-  const context = files.map(f =>
-    `FILE: ${f.path}\n${f.content}`
-  ).join("\n\n");
-
-  const aiResponse = await openaiChat([
-    { role: "user", content: "Repository:\n" + context },
-    { role: "user", content: prompt }
-  ]);
-
-  res.json({ result: aiResponse });
-});
-
-  if (aiResponse.includes("CREATE_FILE:")) {
-  const match = aiResponse.match(/CREATE_FILE:\s(.+?)\n([\s\S]+)/);
-  await writeFile(owner, repo, match[1], match[2], "AI commit");
-}
-
 }
